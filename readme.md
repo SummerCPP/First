@@ -2,21 +2,19 @@
 
 ## Introduction
 
-* This is a lab project this aim at teamwork, professional C++ development. 
-* The development involve several involution. 
+* This is a lab project aiming at team work, professional C++ development. 
+* This invole several iteration. 
 * Agile team. 
 
-### Contributing
+### Role
 
 * GUI development : A
 * Core Module: B
-* Hierarchy Design: LYR
-
-### Role 
+* Architect Design: LYR
 * Leader : LYR 
 
 ### Goal
-* Implement traditional image segmentation algorithm. 
+* Implement traditional image segmentation algorithms. 
 * Develop GUI, using QT. 
 
 ### Platform and tool 
