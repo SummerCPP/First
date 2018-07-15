@@ -1,7 +1,9 @@
-## �ӿ�˵��
+## 模块接口说明
 
-### ģ���� 
+### 模块简介
 
-* Homepage: <http://opencv.org>
+* model 模块是view和controller 与底层数据做交互的模块。
+ 
+### 接口说明
 
-### �ӿ�
+* 
