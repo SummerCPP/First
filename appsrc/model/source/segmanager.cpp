@@ -1,11 +1,15 @@
-#ifndef SEGMODEL_MANAGER_H
-#define SEGMODEL_MANAGER_H
+#include "global.h"
+#include "segmanager.h"
+#include "segimagemodel.h"
 
-class segmodelManager{
-public:
-    void updateProcessMode(int processMode);
-
-private:
-
+static segManager* segManager::generate(const string &filepath, int algocode){
+    cv::Mat *init_data = cv::imread(filepath);
+    if(init_data ->empty()){
+        if(processmode == ALGO_GAUSSIAN_FILTER){
+            return new segImageModel(init_data, processmode);
+        }else{
+            return new segImageModel(init_data, processmode);
+        }
+    }
+    return NULL;
 }
-#endif // SEGMODEL_MANAGER_H

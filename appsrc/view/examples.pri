@@ -1,4 +1,4 @@
-INCLUDEPATH += E:/5.10.0/msvc2017_64/include
+INCLUDEPATH += E:/qt/5.10.0/msvc2017_64/include
 INCLUDEPATH += ../core/header
 INCLUDEPATH += ../model/header
 INCLUDEPATH += E:/opencv/opencv/build/include

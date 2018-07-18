@@ -1,17 +1,21 @@
+#include "segtarget.h"
+#include "global.h"
+#include "segimagemodel.h"
+
 #include <iostream>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/core/core.hpp>
 
-int target::target::getStatus() {
-	return this.status; 
-}
-int target::target::processs() {
-	if (this.task == null) {
-		std::cout << "the targaet is associated with an empty task, aborted! System error !";
-		return -1; 
-	}
-	return this.task.process();
-	
-}
-
-int target::task::process() {
-	// play with core and update data  
+static segTarget* segTarget::generate(const char*filepath, int processmode){
+    cv::Mat *init_data = cv::imread(filepath);
+    if(init_data ->empty()){
+        return NULL;
+    }
+    segTarget *newtarget;
+        if(processmode == ALGO_GAUSSIAN_FILTER){
+            newtarget = new segImageModel(init_data, processmode);
+        }else{
+            newtarget = new segImageModel(init_data, processmode);
+        }
+    }
 }

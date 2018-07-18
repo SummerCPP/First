@@ -24,8 +24,10 @@ public:
     Gaussian_filter();
     ~Gaussian_filter();
     Mat GaussianImage( String filepath , double sigma , int iSize);
+    Mat GaussianImage( Mat img , double sigma , int iSize);
     Mat GaussianImage( String filepath );
-    Mat GaussianImage( InputArray buf); //load image from memory
+    Mat GaussianImage( Mat img);
+
 private:
     double* CreateMuban(int iSize,double sigma);
     Mat operateimage(Mat _img,double*Muban,int iSize);

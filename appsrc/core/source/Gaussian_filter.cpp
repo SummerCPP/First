@@ -76,8 +76,17 @@ Mat Gaussian_filter::GaussianImage( String filepath , double sigma , int iSize){
     return operateimage(image, Muban, iSize);
 }
 
+Mat Gaussian_filter::GaussianImage( Mat img, double sigma , int iSize){
+    double *Muban = CreateMuban(iSize,sigma);
+    return operateimage(img, Muban, iSize);
+}
+
 Mat Gaussian_filter::GaussianImage( String filepath ){
     return GaussianImage(filepath, 0.25, 3);
+}
+
+Mat Gaussian_filter::GaussianImage( Mat img){
+    return GaussianImage(img, 0.25, 3);
 }
 
 Mat GaussianImage( InputArray buf){

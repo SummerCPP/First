@@ -5,10 +5,12 @@ android|ios|winrt {
     error( "Couldn't find the examples.pri file!" )
 }
 SOURCES += main.cpp \
-    SegController.cpp
+    SegController.cpp \
+    ../model/source/segimagemodel.cpp
 
 HEADERS += \
-       SegController.h
+       SegController.h \
+    ../model/header/segimagemodel.h
 
 QT += widgets
 
@@ -27,4 +29,3 @@ OTHER_FILES += data/* \
                ../core/header/* \
                ../core/source/* \
                ../core/library/*
-

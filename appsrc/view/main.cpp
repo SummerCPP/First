@@ -1,3 +1,4 @@
+#include "../model/header/global.h"
 #include "SegController.h"
 
 #include <QtWidgets/QApplication>

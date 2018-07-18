@@ -1,3 +1,4 @@
+#include "../model/header/global.h"
 #include "SegController.h"
 #include "segmodel.h"
 
@@ -18,60 +19,28 @@
 #include <QStandardPaths>
 #include <QTranslator>
 
-static void initializeImageFileDialog(QFileDialog &dialog, QFileDialog::AcceptMode acceptMode)
-{
-    static bool firstDialog = true;
-
-    if (firstDialog) {
-        firstDialog = false;
-        const QStringList picturesLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
-        dialog.setDirectory(picturesLocations.isEmpty() ? QDir::currentPath() : picturesLocations.last());
-    }
-
-    QStringList mimeTypeFilters;
-    const QByteArrayList supportedMimeTypes = acceptMode == QFileDialog::AcceptOpen
-        ? QImageReader::supportedMimeTypes() : QImageWriter::supportedMimeTypes();
-    foreach (const QByteArray &mimeTypeName, supportedMimeTypes)
-        mimeTypeFilters.append(mimeTypeName);
-    mimeTypeFilters.sort();
-    dialog.setMimeTypeFilters(mimeTypeFilters);
-    dialog.selectMimeTypeFilter("image/jpeg");
-    if (acceptMode == QFileDialog::AcceptSave)
-        dialog.setDefaultSuffix("jpg");
-}
-
 //the view for this application is simply an image
-SegController::SegController(QWidget *parentwidget, QLabel *holder, QLabel *holder_after, QPixmap*init)
+SegController::SegController(QWidget *parentwidget, QLabel *holder, QLabel *holder_after, QLabel *holder_stat)
 {
     this->holder = holder ;
     this->holder_after = holder_after;
+    this->holder_stat = holder_stat;
     this->parentWidget = parentwidget;
-    this->initModel(init); //this will create a new model manager
+    this->initModel("E:/test/02.jpg"); //this will create a new model manager
 }
 
-//load image from file system
-/*bool SegController::loadFile(const QString &fileName)
-{
-    QPixmap *pixmap = new QPixmap(fileName);
-    if(pixmap->isNull()){
-        QMessageBox::information(this->parentWidget, QGuiApplication::applicationDisplayName(),
-                                 tr("Cannot load %1")
-                                 .arg(QDir::toNativeSeparators(fileName)));
-        return false;
-    }
-    initModel(pixmap);
-    return true;
-}*/
-
-void SegController::initModel(const QString &filePath){
+bool SegController::initModel(const string &filePath){
     //destroy old model manager
     if(this->modelManager) {
-        delete this->modelManager ;
+        segManager::destroy(this->modelManager);
     }
     //create a new model manager
     //[1] let model manager initialize itself, according to the mode of system
-    this->modelFlag = new segManager;
-    this->modelManager->initModel(filePath, this->processMode);
+    if(this->modelManager = segManager::generate(filePath, processMode)){
+       return true;
+    }else{
+        return false;
+    }
 }
 
 //change target image
@@ -79,7 +48,7 @@ void SegController::setTarget(){
     QFileDialog dialog(this->parentWidget, tr("Open File"));
     initializeImageFileDialog(dialog, QFileDialog::AcceptOpen);
     if(dialog.exec() == QDialog::Accepted){
-        initModel(dialog.selectedFiles().first());
+        initModel(dialog.selectedFiles().first().toUtf8().constData());
     }else{
         return ;
     }
@@ -131,33 +100,21 @@ bool SegController::saveFile(const QString &fileName)
     pixmap.save(&buffer, "PNG");
 }
 
-SegController::~SegController(){}
-
-//refresh view, view-model update the view
-void SegController::updateView(QPixmap *pixmap1)
-    this->target =  pixmap;
-    this->holder -> setPixmap(pixmap->scaled(this->holder->size().width(),this->holder->size().height(),Qt::KeepAspectRatio));
-    this->holder_after->setPixmap(pixmap->scaled(this->holder_after->size().width(),this->holder_after->size().height(),Qt::KeepAspectRatio));
-
-}
-
-//refresh view, view-model update the view
-void SegController::updateView(QPixmap *pixmap1, QPixmap *pixmap2){
-    //
-}
-
 //retrieve more info from data model
 void SegController::updateView(){
     if(!this->modelManager){
-        showDialog("System Error! System has null");return ;
+        showDialog("System Error! System has null model manager");return ;
     }
-    const uchar* lastestdata = modeManager->latest();
-    int len = modeManager -> latestDataLen();
-    if(!lastestdata)
+    const uchar *channel1 = modelManager->latestDataCh1();
+    const uchar *channel2 = modelManager->latestDataCh2();
+    int len1 = modeManager->lenChannel1();
+    int len2 = modeManager->lenChannel2();
+    const char *lastestStat = modelManager->lateStatistics();
+    if(!channel2){
         showDialog("System Error :: Get Null Lastest Data from model.");
         return ;
     }
-    updateView(uchar2qt(lastestdata));
+    setView(uchar2qt(channel1,len1), uchar2qt(channel2,len2), lastestStat);
 }
 
 //transform memory space to qt image
@@ -165,8 +122,54 @@ QPixmap SegController::uchar2qt(const uchar* dat, len){
     return QPixmap::loadFromData(data,len);
 }
 
+//refresh view, view-model update the view
+void SegController::setView(QPixmap *pixmap1, QPixmap *pixmap2){
+    this->target =  pixmap2;
+    this->holder -> setPixmap(pixmap1->scaled(this->holder->size().width(),this->holder->size().height(),Qt::KeepAspectRatio));
+    this->holder_after->setPixmap(pixmap2->scaled(this->holder_after->size().width(),this->holder_after->size().height(),Qt::KeepAspectRatio));
+}
+
+//set all view element
+void SegController::setView(QPixmap *map1, QPixmap *map2, const char* statistics){
+    setView(map1, map2);
+    this->holder_stat->setText(statistics);
+}
+
+//
+void SegController::setView(const QString& segstat){
+    this->target =  pixmap;
+    this->holder -> setPixmap(pixmap->scaled(this->holder->size().width(),this->holder->size().height(),Qt::KeepAspectRatio));
+    this->holder_after->setPixmap(pixmap->scaled(this->holder_after->size().width(),this->holder_after->size().height(),Qt::KeepAspectRatio));
+}
+
 //show message dialog in current window
 void SegController::showDialog(const QString &message){
     QMessageBox::information(this->parentWidget, QGuiApplication::applicationDisplayName(),
                              tr(message));
 }
+
+//initialize File dialog
+static void initializeImageFileDialog(QFileDialog &dialog, QFileDialog::AcceptMode acceptMode)
+{
+    static bool firstDialog = true;
+
+    if (firstDialog) {
+        firstDialog = false;
+        const QStringList picturesLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+        dialog.setDirectory(picturesLocations.isEmpty() ? QDir::currentPath() : picturesLocations.last());
+    }
+
+    QStringList mimeTypeFilters;
+    const QByteArrayList supportedMimeTypes = acceptMode == QFileDialog::AcceptOpen
+        ? QImageReader::supportedMimeTypes() : QImageWriter::supportedMimeTypes();
+    foreach (const QByteArray &mimeTypeName, supportedMimeTypes)
+        mimeTypeFilters.append(mimeTypeName);
+    mimeTypeFilters.sort();
+    dialog.setMimeTypeFilters(mimeTypeFilters);
+    dialog.selectMimeTypeFilter("image/jpeg");
+    if (acceptMode == QFileDialog::AcceptSave)
+        dialog.setDefaultSuffix("jpg");
+}
+
+//destructor of controller
+SegController::~SegController(){}

@@ -9,7 +9,6 @@ class SegController : public QObject
 public:
     SegController(QWidget *parentWidget,QLabel *holder, QLabel *holder_after, QPixmap *init);
     ~SegController();
-
     void initilizeDataData();
 
 public Q_SLOTS:
@@ -25,8 +24,7 @@ private:
 
     //view part, that is the image itself
     QWidget *parentWidget;
-    QLabel *holder;
-    QLabel *holder_after;
+    QLabel *holder, *holder_after, *holder_stat;
     QPixmap *target;
     int processMode;
 
@@ -38,9 +36,15 @@ private:
     bool loadFile(const QString &filepath); // load file from file system
     bool saveFile(const QString &filepath);
     void initModel(QPixmap*);
-    void updateView(); //
-    void updateView(QPixmap*); //
-    void updateView(QPixmap*, QPixmap*); //
-    void showDialog(const QString & message) ;
+    void updateView();
+
+    void setView(QPixmap*pixmap1, QPixmap*pixmap2);
+    void setView(QPixmap*pixmap1, QPixmap*pixmap2, const char* stat);
+
+    void showDialog(const QString &message);
+
 };
+
+static void initializeImageFileDialog(QFileDialog &dialog, QFileDialog::AcceptMode acceptMode);
+
 #endif
