@@ -1,8 +1,8 @@
 #ifndef SEG_CONTROLLER_H
 #define SEG_CONTROLLER_H
 
-#include <QtCore/QTimer>
 #include <QLabel>
+
 
 class SegController : public QObject
 {
@@ -30,6 +30,10 @@ private:
     QLabel *holder_after;
     QPixmap *target;
     int processMode;
+
+    //model part
+    SegModel *modelManager;
+    int modelFlag = 0;
 
     //inner functions
     bool loadFile(const QString &filepath); // load file from file system

@@ -10,11 +10,19 @@ SOURCES += main.cpp \
     SegController.cpp
 
 HEADERS += \
-    SegController.h
+       SegController.h
 
 QT += widgets
 
 RESOURCES +=
 
-OTHER_FILES += doc/src/* \
-               doc/images/*
+OTHER_FILES += data/* \
+               data/image/* \
+               ../model/* \
+               ../model/header/* \
+               ../model/source/* \
+               ../* \
+               ../core/* \
+               ../core/header/* \
+               ../core/source/*
+

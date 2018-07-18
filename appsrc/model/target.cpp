@@ -1,5 +1,3 @@
-#include "../core/core.h"
-
 #include <iostream>
 
 int target::target::getStatus() {

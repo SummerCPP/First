@@ -1,7 +1,7 @@
 #include <iostream>
 #include "target.hpp"
 
-namespace model; 
+namespace model
 #define TASK_GAUSSIAN_FILTER 1; 
 #define TASK_OTHERS 2 ;
 
@@ -13,7 +13,7 @@ public:
 
 	task task_info; 
 
-	public target(string io_info, int task_code) {
+    target(string io_info, int task_code) {
 		std::cout << "target initiailization" << std::endl; 
 		this.task_info.setIOinfo(); 
 		this.task_info.setIOinfo();
