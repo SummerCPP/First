@@ -3,6 +3,7 @@
 
 class segmodelManager{
 public:
+    void updateProcessMode(int processMode);
 
 private:
 

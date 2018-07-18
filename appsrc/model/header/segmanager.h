@@ -1,7 +1,7 @@
 #ifndef SEGMODEL_MANAGER_H
 #define SEGMODEL_MANAGER_H
 
-class segmodelManager{
+class segManager{
 public:
 
 private:

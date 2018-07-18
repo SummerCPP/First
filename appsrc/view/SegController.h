@@ -3,7 +3,6 @@
 
 #include <QLabel>
 
-
 class SegController : public QObject
 {
     Q_OBJECT
@@ -39,6 +38,9 @@ private:
     bool loadFile(const QString &filepath); // load file from file system
     bool saveFile(const QString &filepath);
     void initModel(QPixmap*);
-    void updateView();
+    void updateView(); //
+    void updateView(QPixmap*); //
+    void updateView(QPixmap*, QPixmap*); //
+    void showDialog(const QString & message) ;
 };
 #endif

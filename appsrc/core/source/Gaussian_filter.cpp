@@ -1,4 +1,3 @@
-//
 //  Gaussian_filter.cpp
 //  ProjectOpenCV
 //
@@ -79,6 +78,12 @@ Mat Gaussian_filter::GaussianImage( String filepath , double sigma , int iSize){
 
 Mat Gaussian_filter::GaussianImage( String filepath ){
     return GaussianImage(filepath, 0.25, 3);
+}
+
+Mat GaussianImage( InputArray buf){
+    Mat *ret = new Mat;
+    imdecode(buf, CV_LOAD_IMAGE_UNCHANGED, ret);
+    return ret ;
 }
 
 Gaussian_filter(){}

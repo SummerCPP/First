@@ -1,7 +1,6 @@
 #include <iostream>
-#include "target.hpp"
+#include "target.h"
 
-namespace model
 #define TASK_GAUSSIAN_FILTER 1; 
 #define TASK_OTHERS 2 ;
 
