@@ -79,4 +79,7 @@ Mat Gaussian_filter::GaussianImage( String filepath , double sigma , int iSize){
 
 Mat Gaussian_filter::GaussianImage( String filepath ){
     return GaussianImage(filepath, 0.25, 3);
-};
+}
+
+Gaussian_filter(){}
+~Gaussian_filter(){}

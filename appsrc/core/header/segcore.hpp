@@ -17,13 +17,13 @@
 
 #include <stdio.h>
 #include <opencv2/opencv.hpp>
-#include <strings.h>
+#include <cstring>
 
 using namespace cv;
 class Gaussian_filter{
 public:
-    Gaussian_filter(){};
-    ~Gaussian_filter(){};
+    Gaussian_filter();
+    ~Gaussian_filter();
     Mat GaussianImage( String filepath , double sigma , int iSize);
     Mat GaussianImage( String filepath );
 private:

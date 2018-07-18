@@ -21,8 +21,12 @@ OTHER_FILES += data/* \
                ../model/* \
                ../model/header/* \
                ../model/source/* \
-               ../* \
+               ../model/library/* \
+               ../*.cpp \
+               ../*.h \
+               ../*.hpp \
                ../core/* \
                ../core/header/* \
-               ../core/source/*
+               ../core/source/* \
+               ../core/library/*
 
