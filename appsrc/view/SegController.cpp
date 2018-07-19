@@ -80,25 +80,16 @@ void SegController::process(){
     updateView();
 }
 
-void SegController::saveImage()
+void SegController::saveModel()
 {
-    printf("===================");
+    // debug save model
     QFileDialog dialog(parentWidget, tr("Save File As"));
     initializeImageFileDialog(dialog, QFileDialog::AcceptSave);
     if(dialog.exec() == QDialog::Accepted){
-        saveFile(dialog.selectedFiles().first());
+        this->modelManager->saveModel(dialog.selectedFiles().first());
     }
 }
 
-bool SegController::saveFile(const QString &fileName)
-{
-    showDialog(fileName);
-    QPixmap pixmap;
-    QByteArray bytes;
-    QBuffer buffer(&bytes);
-    buffer.open(QIODevice::WriteOnly);
-    pixmap.save(&buffer, "PNG");
-}
 
 //retrieve more info from data model
 void SegController::updateView(){

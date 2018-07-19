@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     QObject::connect(processButton, &QPushButton::clicked, controller,
                      &SegController::process);
     QObject::connect(saveImageButton, &QPushButton::clicked, controller,
-                     &SegController::saveImage);
+                     &SegController::saveModel);
     QComboBox::connect(algomenu , &QComboBox::currentTextChanged,controller,
                      &SegController::setTarget);
 

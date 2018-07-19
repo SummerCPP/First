@@ -2,21 +2,25 @@
 #define SEGIMAGEMODEL_H
 
 #include "segmanager.h"
-#include "global.h"
 #include "opencv2/highgui/highgui.hpp"
 
-class segImageModel : segManager{
+
+;
+class segImageModel : public segManager {
+
 public :
+    segImageModel(cv::Mat , int );
+    ~segImageModel();
+
     void updateProcessMode(int processMode);
     void process();
-    cv::Mat latestData();
-    bool saveModel();
-    segImageModel(cv::Mat , int );
+    cv::Mat getLatestData();
+    bool saveModel(const std::string&);
 
 private :
     int algoCode;
     int statusFlag = 0;
-    cv::Mat * init_mat ;
-    cv::Mat * latest_mat;
-}
+    cv::Mat *init_mat ;
+    cv::Mat *latest_mat;
+};
 #endif // SEGIMAGEMODEL_H

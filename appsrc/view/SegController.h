@@ -16,7 +16,7 @@ public Q_SLOTS:
     void setAlgo(const QString &t);
     void undo();
     void process();
-    void saveImage();
+    void saveModel();
 
 private:
     const int ALGO_GAUSSIAN_FILTER = 1;
