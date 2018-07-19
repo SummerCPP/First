@@ -5,7 +5,7 @@
 //  Copyright © 2018年 Jeanne Mystery. All rights reserved.
 //
 
-#include "Gaussian_filter.hpp"
+#include "../header/Gaussian_filter.hpp"
 
 double* Gaussian_filter::CreateMuban(int iSize,double sigma)
 {
@@ -89,11 +89,6 @@ Mat Gaussian_filter::GaussianImage( Mat img){
     return GaussianImage(img, 0.25, 3);
 }
 
-Mat GaussianImage( InputArray buf){
-    Mat *ret = new Mat;
-    imdecode(buf, CV_LOAD_IMAGE_UNCHANGED, ret);
-    return ret ;
-}
 
-Gaussian_filter(){}
-~Gaussian_filter(){}
+Gaussian_filter::Gaussian_filter(){}
+Gaussian_filter::~Gaussian_filter(){}

@@ -14,9 +14,7 @@
 #ifndef Gaussian_filter_hpp
 #define Gaussian_filter_hpp
 
-#include <stdio.h>
 #include <opencv2/opencv.hpp>
-#include <cstring>
 
 using namespace cv;
 class Gaussian_filter{
