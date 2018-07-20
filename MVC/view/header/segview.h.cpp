@@ -1,4 +1,4 @@
-#include "../model/header/global.h"
+#include "../model/header/config.h"
 #include "SegController.h"
 
 #include <QtWidgets/QApplication>
@@ -13,6 +13,7 @@
 #include <QPixMap>
 #include <QtWidgets/QComboBox>
 #include <QScrollArea>
+#include <QTranslator>
 
 #define H 1024
 #define W 1024
@@ -33,6 +34,7 @@ int main(int argc, char **argv)
     //create a container for simple view
     QLabel *container_before = new QLabel();
     QLabel *container_after = new QLabel();
+    QLabel *container_stat = new QLabel();
 
     //initial picture
     QPixmap *image0 = new QPixmap(2000,2000);
@@ -88,13 +90,18 @@ int main(int argc, char **argv)
     vLayout->addWidget(processButton);
     vLayout->addWidget(saveImageButton);
 
+    container_after->setScaledContents(false);
+    container_after->setMinimumSize(QSize(100,100));
+    container_after->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    container_after->setFocusPolicy(Qt::StrongFocus);
     QScrollArea *stat = new QScrollArea;
     stat->setMinimumHeight(100);
     stat->setMinimumWidth(100);
     vLayout ->addWidget(stat);
+    stat->setWidget(container_stat);
 
     //add controller, and hand QLabel view to controllerf
-    SegController *controller = new SegController(widget,container_before,container_after, image0);
+    SegController *controller = new SegController(widget,container_before,container_after,container_stat);
 
     //view to controller
     QObject::connect(loadButton, &QPushButton::clicked, controller,
@@ -104,9 +111,9 @@ int main(int argc, char **argv)
     QObject::connect(saveImageButton, &QPushButton::clicked, controller,
                      &SegController::saveModel);
     QComboBox::connect(algomenu , &QComboBox::currentTextChanged,controller,
-                     &SegController::setTarget);
+                     &SegController::setAlgo);
 
-    //execution
-    widget->show();
-    return app.exec();
+    //init algorithm
+    controller->setAlgo(algomenu->currentText());
+
 }

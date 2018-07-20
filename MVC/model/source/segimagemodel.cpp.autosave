@@ -1,26 +1,24 @@
-#include "../header/segimagemodel.h"
-// debug 
-//#include "../core/header/segcore.hpp"
+#include "../header/segmodel.h"
 
-segImageModel::segImageModel(cv::Mat mat, int processmode)
+segModel::segModel(cv::Mat mat, int processmode)
 {
     this->algoCode = processmode;
     this->init_mat = new cv::Mat(mat);
     this->latest_mat = new cv::Mat(mat) ; //[todo]
 }
 
-segImageModel::~segImageModel(){
+segModel::~segModel(){
     printf("Destroy this model");
     delete this->init_mat ;
     delete this->latest_mat ;
 }
 
-void segImageModel::updateProcessMode(int processMode){
+void segModel::updateProcessMode(int processMode){
     // test
     algoCode=processMode;
 }
 
-void segImageModel::process(){
+void segModel::process(){
     if(algoCode == ALGO_INVALID){
         printf("segImageModel do not have legal algo parameter set \n") ;
         //do nothing
@@ -37,11 +35,11 @@ void segImageModel::process(){
     }
 }
 
-cv::Mat segImageModel::getLatestData(){
+cv::Mat segModel::getLatestData(){
 	return *latest_mat; 
 }
 
-bool segImageModel::saveModel(const std::string &filename){
+bool segModel::saveModel(const std::string &filename){
     // unit test
     // do nothing
     printf("saveModel()\n");

@@ -19,6 +19,9 @@
 #include <QStandardPaths>
 #include <QTranslator>
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 //the view for this application is simply an image
 SegController::SegController(QWidget *parentwidget, QLabel *holder, QLabel *holder_after, QLabel *holder_stat)
 {
@@ -26,21 +29,23 @@ SegController::SegController(QWidget *parentwidget, QLabel *holder, QLabel *hold
     this->holder_after = holder_after;
     this->holder_stat = holder_stat;
     this->parentWidget = parentwidget;
-    this->initModel("E:/test/02.jpg"); //this will create a new model manager
+    this->initModel("F:/test/02.jpg"); //this will create a new model manager
 }
 
-bool SegController::initModel(const string &filePath){
+bool SegController::initModel(const QString&filePath){
     //destroy old model manager
     if(this->modelManager) {
         segManager::destroy(this->modelManager);
     }
     //create a new model manager
     //[1] let model manager initialize itself, according to the mode of system
-    if(this->modelManager = segManager::generate(filePath, processMode)){
+    if(this->modelManager = segManager::generate(filePath.toUtf8().constData(), processMode)){
+       updateView();
        return true;
     }else{
         return false;
     }
+
 }
 
 //change target image
@@ -48,7 +53,7 @@ void SegController::setTarget(){
     QFileDialog dialog(this->parentWidget, tr("Open File"));
     initializeImageFileDialog(dialog, QFileDialog::AcceptOpen);
     if(dialog.exec() == QDialog::Accepted){
-        initModel(dialog.selectedFiles().first().toUtf8().constData());
+        initModel(dialog.selectedFiles().first());
     }else{
         return ;
     }
@@ -61,22 +66,15 @@ void SegController::setAlgo(const QString &algo){
     }else{
         processMode = ALGO_OTHERS ;
     }
-    this->modelManager->updateModel(processMode);
+    this->modelManager->updateProcessMode(processMode);
 }
 
 void SegController::undo(){
    //[TODO]
 }
 
-//process Image under current mode
-void SegController::processStageView(){
-    while(this->segmodel->processStage()){
-        updateView();
-    }
-}
-
 void SegController::process(){
-    this->segmodel->process();
+    this->modelManager->process();
     updateView();
 }
 
@@ -86,7 +84,7 @@ void SegController::saveModel()
     QFileDialog dialog(parentWidget, tr("Save File As"));
     initializeImageFileDialog(dialog, QFileDialog::AcceptSave);
     if(dialog.exec() == QDialog::Accepted){
-        this->modelManager->saveModel(dialog.selectedFiles().first());
+        this->modelManager->saveModel(dialog.selectedFiles().first().toUtf8().constData());
     }
 }
 
@@ -96,47 +94,39 @@ void SegController::updateView(){
     if(!this->modelManager){
         showDialog("System Error! System has null model manager");return ;
     }
-    const uchar *channel1 = modelManager->latestDataCh1();
-    const uchar *channel2 = modelManager->latestDataCh2();
-    int len1 = modeManager->lenChannel1();
-    int len2 = modeManager->lenChannel2();
-    const char *lastestStat = modelManager->lateStatistics();
-    if(!channel2){
+    cv::Mat ch1 = modelManager->getLatestData();
+    cv::Mat ch2 = modelManager->getLatestData();
+    QString newstat("hello, world!");
+    if(ch2.empty()){
         showDialog("System Error :: Get Null Lastest Data from model.");
         return ;
     }
-    setView(uchar2qt(channel1,len1), uchar2qt(channel2,len2), lastestStat);
-}
+    QImage *qtimg1 = new QImage((uchar*) ch1.data, ch1.cols, ch1.rows,  ch1.step, QImage::Format_RGB888);
+    QImage *qtimg2 = new QImage((uchar*) ch2.data, ch2.cols, ch2.rows,  ch2.step, QImage::Format_RGB888);
 
-//transform memory space to qt image
-QPixmap SegController::uchar2qt(const uchar* dat, len){
-    return QPixmap::loadFromData(data,len);
+    setView(QPixmap::fromImage(*qtimg1),QPixmap::fromImage(*qtimg2),newstat);
 }
 
 //refresh view, view-model update the view
-void SegController::setView(QPixmap *pixmap1, QPixmap *pixmap2){
-    this->target =  pixmap2;
-    this->holder -> setPixmap(pixmap1->scaled(this->holder->size().width(),this->holder->size().height(),Qt::KeepAspectRatio));
-    this->holder_after->setPixmap(pixmap2->scaled(this->holder_after->size().width(),this->holder_after->size().height(),Qt::KeepAspectRatio));
+void SegController::setView(QPixmap pixmap1, QPixmap pixmap2){
+    this->holder -> setPixmap(pixmap1.scaled(this->holder->size().width(),this->holder->size().height(),Qt::KeepAspectRatio));
+    this->holder_after->setPixmap(pixmap2.scaled(this->holder_after->size().width(),this->holder_after->size().height(),Qt::KeepAspectRatio));
 }
 
 //set all view element
-void SegController::setView(QPixmap *map1, QPixmap *map2, const char* statistics){
+void SegController::setView(QPixmap  map1, QPixmap map2, const QString &stat){
     setView(map1, map2);
-    this->holder_stat->setText(statistics);
+    this->holder_stat->setText(stat);
 }
 
 //
 void SegController::setView(const QString& segstat){
-    this->target =  pixmap;
-    this->holder -> setPixmap(pixmap->scaled(this->holder->size().width(),this->holder->size().height(),Qt::KeepAspectRatio));
-    this->holder_after->setPixmap(pixmap->scaled(this->holder_after->size().width(),this->holder_after->size().height(),Qt::KeepAspectRatio));
+    this->holder_stat->setText(segstat);
 }
 
 //show message dialog in current window
 void SegController::showDialog(const QString &message){
-    QMessageBox::information(this->parentWidget, QGuiApplication::applicationDisplayName(),
-                             tr(message));
+    QMessageBox::information(this->parentWidget, QGuiApplication::applicationDisplayName(), message);
 }
 
 //initialize File dialog
