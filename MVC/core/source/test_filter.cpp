@@ -1,4 +1,5 @@
-# include "../header/segcore.hpp"
+#ifdef _TEST_
+# include "../header/segcore.h"
 # include "opencv2/highgui/highgui.hpp"
 
 int main() {
@@ -7,3 +8,4 @@ int main() {
 	cv::Mat ret =filter.GaussianImage(mat,20,5); 
 	imwrite("F:/test/result.png", ret); 
 }
+#endif

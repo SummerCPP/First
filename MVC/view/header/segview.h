@@ -1,8 +1,7 @@
 #ifndef SEGVIEW_H
 #define SEGVIEW_H
 
-#include "../controller/header/SegController.h"
-
+#include <QObject>
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -25,28 +24,16 @@
 #define MIN_ST_W 400
 #define MIN_ST_H 400
 
-class SegView : QObject{
+class SegController;
+class segView : public QObject {
     Q_OBJECT
 public:
-    SegView();
-    ~SegView();
-    void setController(SegController *controller);
-
-public Q_SLOTS:
-    void collect_parameter();
-    void update_statistics(const QString&);
-    void update_origin(const QPixmap&);
-    void update_result(const QPixmap&);
-    void update_menu(const std::string*, int);
-    void update_init_model(const QPixmap&, const QString&, const QStringList&);
-
-signals:
-    void gsfilter(double, int);
-
-private:
+    segView();
+    ~segView();
+    void show();
     QWidget *widget = new QWidget;
     QHBoxLayout * layout_lv0 = new QHBoxLayout;
-    QVBoxLayout * layout_control_panel = new QHBoxLayout;
+    QVBoxLayout * layout_control_panel = new QVBoxLayout;
 
     QLabel *container_origin = new QLabel;
     QLabel *container_after = new QLabel;
@@ -60,8 +47,21 @@ private:
     QPushButton *but_process = new QPushButton;
     QPushButton *but_save = new QPushButton;
     QPushButton *but_load = new QPushButton;
+    QPushButton *but_undo = new QPushButton;
 
     SegController *controller;
 
-}
+public Q_SLOTS:
+    void collect_parameter();
+    void update_statistics(const QString&);
+    void update_origin(const QPixmap&);
+    void update_result(const QPixmap&);
+    void update_menu(const std::string*, int);
+    void update_init_model(const QPixmap&, const QPixmap&, const QString&);
+
+signals:
+    void gsfilter(double, int);
+
+};
+
 #endif // SEGVIEW_H

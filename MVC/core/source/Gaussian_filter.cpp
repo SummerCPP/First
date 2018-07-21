@@ -5,7 +5,9 @@
 //  Copyright © 2018年 Jeanne Mystery. All rights reserved.
 //
 
-#include "../header/Gaussian_filter.hpp"
+#include "Gaussian_filter.hpp"
+
+using namespace cv;
 
 double* Gaussian_filter::CreateMuban(int iSize,double sigma)
 {

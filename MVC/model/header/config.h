@@ -6,6 +6,10 @@
 #define IMG_GS_FILTER 0
 #define IMG_INFO_HIDING 1
 #define IMG_OTHERS 2
-#define IMG_ALGO_LIST {"Guassian Filter","Information Hiding","Others"}
 
+#define GS_FILTER "Guassian Filter"
+#define INFO_HIDING "Information Hiding"
+#define ALGO_OTHERS "Others"
+
+#define MAX_HISTORY_NUM 20
 #endif // GLOBAL_H

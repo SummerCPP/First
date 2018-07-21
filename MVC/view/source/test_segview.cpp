@@ -1,4 +1,4 @@
-#include "../view/header/segview.h"
+#include "segview.h"
 #include <QApplication>
 #include <QWidget>
 
@@ -6,9 +6,7 @@ int main(int argc, char **argv)
 {
     // create a application
     QApplication app(argc, argv);
-    SegView *v = new SegView;
-    SegController *c = new SegControll(v);
-    v->setController(c);
+    segView *v = new segView;
     v->show();
-    return app.exec();
+    app.exec();
 }
