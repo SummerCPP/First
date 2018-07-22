@@ -118,6 +118,312 @@ bool segModel::shift(int a, int b){
     }
 }
 
+bool segModel::line(){
+    if (!getStatus()) {
+        return false;
+    }
+    Line_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.LineImage(temp);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::freezing(){
+    if (!getStatus()) {
+        return false;
+    }
+    Freezing_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.FreezingImage(temp);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::casting(){
+    if (!getStatus()) {
+        return false;
+    }
+    Casting_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.CastingImage(temp);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::glass(){
+    if (!getStatus()) {
+        return false;
+    }
+    Glass_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.GlassImage(temp);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::black(){
+    if (!getStatus()) {
+        return false;
+    }
+    Black_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.BlackImage(temp);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::sketch(){
+    if (!getStatus()) {
+        return false;
+    }
+    Sketch_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.SketchImage(temp);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorautumn(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,AUTUMN);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorbone(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,BONE);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorjet(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,JET);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorwinter(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,WINTER);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorrainbow(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,RAINBOW);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorocean(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,OCEAN);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorsummer(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,SUMMER);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorspring(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,SPRING);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorcool(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,COOL);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorhsv(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,HSV);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorpink(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,PINK);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
+bool segModel::colorhot(){
+    if (!getStatus()) {
+        return false;
+    }
+    ColorChange_filter filter ;
+    cv::Mat temp = history.front()->clone();
+    temp = filter.ColorChageImage(temp,HOT);
+    if (temp.empty()){
+        temp.release();
+        return false;
+    }
+    else {
+        updateHistory(temp);
+        return true;
+    }
+}
+
 bool segModel::colorchange(){
     if (!getStatus()) {
         return false;

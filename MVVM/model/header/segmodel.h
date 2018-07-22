@@ -36,7 +36,25 @@ public :
     bool fragment();
     bool fragmentlomo();
     bool oldpaperimage();
-
+    bool line();
+    bool freezing();
+    bool casting();
+    bool glass();
+    bool black();
+    bool sketch();
+    bool colorautumn();
+    bool colorbone();
+    bool colorjet();
+    bool colorwinter();
+    bool colorrainbow();
+    bool colorocean();
+    bool colorsummer();
+    bool colorspring();
+    bool colorcool();
+    bool colorhsv();
+    bool colorpink();
+    bool colorhot();
+    
 private :
     const int MAX_VIRSION_NUM = MAX_HISTORY_NUM;
     bool loaded  = false;
