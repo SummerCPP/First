@@ -27,8 +27,8 @@
 
 #define H 1024
 #define W 1024
-#define MIN_ST_W 400
-#define MIN_ST_H 400
+#define MIN_ST_W 300
+#define MIN_ST_H 300
 
 
 ;
@@ -62,6 +62,7 @@ public:
     QPushButton *but_save = new QPushButton;
     QPushButton *but_load = new QPushButton;
     QPushButton *but_undo = new QPushButton;
+    QPushButton *but_stage = new QPushButton;
 
 
 public Q_SLOTS:

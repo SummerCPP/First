@@ -27,8 +27,9 @@ public :
 
 
 public slots:
-    //内部控制，参数采集
     void modeChanged(int);
+
+    //内部控制，参数采集
     void handle_parameterChange(int);
     void reportGsfilter();
     void reportAddnoise();

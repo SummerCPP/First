@@ -29,6 +29,7 @@ public:
 public Q_SLOTS:
     void loadImage();
     void undo();
+    void stage();
     void saveModel();
 
     void processImage();
@@ -49,12 +50,11 @@ private:
     QPixmap imgCh1;
     QPixmap imgCh2;
     int algorithmMode = IMG_ALGO_0_GSFILTER;
+    segParameter *parameter = new segParameter_gsfilter(10,1.5,IMG_ALGO_0_GSFILTER); //default to gsfilter
     std::string algorithmList[IMG_ALGO_N];
     int algo_num;
-    segParameter *parameter;
     QString message;
 
-    void showDialog(const QString &message);
     void updateView();
 
     //void adjustDataReport(); //[todo]

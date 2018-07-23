@@ -11,9 +11,9 @@ segView::segView(){
     widget_layout ->addLayout(layout_data);
 
     //layout_data->addWidget(datareport);
-    layout_lv0 ->addWidget(area_origin);
-    layout_lv0 ->addWidget(area_after );
-    layout_lv0 ->addLayout(layout_control_panel);
+    layout_lv0 ->addWidget(area_origin, 2);
+    layout_lv0 ->addWidget(area_after, 2);
+    layout_lv0 ->addLayout(layout_control_panel,1);
 
     container_origin->setScaledContents(false);
     container_origin->setMinimumSize(QSize(MIN_ST_W, MIN_ST_H));
@@ -25,8 +25,8 @@ segView::segView(){
     container_after->setSizePolicy (QSizePolicy::Expanding, QSizePolicy::Expanding);
     container_after->setFocusPolicy(Qt::StrongFocus);
 
-    container_stat->setScaledContents(false);
-    container_stat->setMinimumSize(QSize(MIN_ST_W/3, MIN_ST_H/3));
+    container_stat->setScaledContents(true);
+    container_stat->setMinimumSize(QSize(MIN_ST_W, MIN_ST_H));
 
     container_stat->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     container_stat->setFocusPolicy(Qt::StrongFocus);
@@ -46,6 +46,7 @@ segView::segView(){
     layout_control_panel->addWidget(but_load);
     layout_control_panel->addWidget(but_process);
     layout_control_panel->addWidget(but_undo);
+    layout_control_panel->addWidget(but_stage);
     layout_control_panel->addWidget(but_save);
     layout_control_panel->addWidget(para);
     layout_control_panel->addWidget(area_stat);
@@ -54,7 +55,7 @@ segView::segView(){
     but_process->setText(QStringLiteral("Process"));
     but_save->setText(QStringLiteral("Save"));
     but_undo->setText(QStringLiteral("Undo"));
-
+    but_stage->setText(QStringLiteral("Stage"));
 }
 
 void segView::update_combobox(const std::string*menu, int n){
@@ -66,6 +67,7 @@ void segView::update_combobox(const std::string*menu, int n){
 
 void segView::update_message(const QString &stat){
     this->container_stat -> setText(stat);
+    this->container_stat -> setAlignment(Qt::AlignHCenter);
 }
 
 void segView::update_ch1(const QPixmap& pix){
@@ -92,4 +94,5 @@ segView::~segView(){
     delete this->but_process;
     delete this->but_save;
     delete this->but_undo;
+    delete this->but_stage;
 }

@@ -183,13 +183,13 @@ bool segModel::fixedvignetting(int color){
     }
 }
 
-bool segModel::fragment(){
+bool segModel::fragment(int ofs){
     if (!getStatus()) {
         return false;
     }
     OldMovie_filter filter ;
     cv::Mat temp = history.front()->clone();
-    temp = filter.FragmentImage(temp);
+    temp = filter.FragmentImage(temp, ofs);
     if (temp.empty()){
         temp.release();
         return false;
@@ -285,3 +285,15 @@ bool segModel::undo(){
     }
     return true;
 }
+
+bool segModel::stage(){
+    if(getStatus()){
+        while(this->history.size()>1){
+            this->history.pop_back();
+        }
+    }else{
+        return false;
+    }
+    return true;
+}
+

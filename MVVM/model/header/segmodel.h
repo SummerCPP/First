@@ -22,6 +22,7 @@ public :
     cv::Mat getInitialData();
     bool saveModel(const std::string&);
     bool undo();
+    bool stage();
     void updateHistory(cv::Mat&);
 
     //功能
@@ -33,7 +34,7 @@ public :
     bool oldimage();
     bool oldmovieimage();
     bool fixedvignetting(int );
-    bool fragment();
+    bool fragment(int);
     bool fragmentlomo();
     bool oldpaperimage();
 

@@ -24,6 +24,7 @@ int main(int argc, char **argv)
     QObject::connect(v->but_load, &QPushButton::clicked, vm, &SegViewModel::loadImage);
     QObject::connect(v->but_save, &QPushButton::clicked, vm, &SegViewModel::saveModel);
     QObject::connect(v->but_undo, &QPushButton::clicked, vm, &SegViewModel::undo);
+    QObject::connect(v->but_stage, &QPushButton::clicked, vm, &SegViewModel::stage);
     QObject::connect(v->but_process,&QPushButton::clicked, vm, &SegViewModel::processImage);
 
     //数据-v-vm

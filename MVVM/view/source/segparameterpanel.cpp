@@ -4,9 +4,10 @@
 #include <iostream>
 
 void segParameterPanel::handle_parameterChange(int i){
-    std::cout << " i is : " << i << " \n ";
-    if(i != this->mode) {
+    //[debug]std::cout << " i is : " << i << " \n ";
+    if(true) {
         setAllVisible(false);
+
         if(i == IMG_ALGO_0_GSFILTER) {
             this->panel_gsfilter->setVisible(true);
         } else if( i == IMG_ALGO_1_ADD_NOISE) {
@@ -20,6 +21,7 @@ void segParameterPanel::handle_parameterChange(int i){
         }  else if( i == IMG_ALGO_5_OLD_MOVIE) {
             ;
         }  else if( i == IMG_ALGO_6_FIXED_VIGNETTING) {
+            std::cout <<"fixed vignetting \n";
             this->panel_fixedvignetting->setVisible(true);
         }  else if( i == IMG_ALGO_7_FRAGMENT) {
             this->panel_fragment->setVisible(true);
@@ -46,6 +48,7 @@ segParameterPanel::segParameterPanel(){
     layout->addWidget(this->panel_gsfilter);
     layout->addWidget(this->panel_shift);
 
+    //每一类带参数的算法的控制面板
     setup_addnoise();
     setup_fixedvignetting();
     setup_gsfilter();
@@ -54,7 +57,7 @@ segParameterPanel::segParameterPanel(){
 
     this->setVisible(true);
     this->setAllVisible(false);
-    this->panel_addnoise->setVisible(true);
+    this->panel_gsfilter->setVisible(true);
 }
 
 void segParameterPanel::setAllVisible(bool t) {
@@ -94,10 +97,11 @@ void segParameterPanel::setup_addnoise(){
 
 void segParameterPanel::setup_fixedvignetting(){
     QVBoxLayout * l = new QVBoxLayout;
-    QSpinBox * s_color = (new QSpinBox());
+    QSpinBox * s_color = new QSpinBox();
     QLabel *   n_color= new QLabel("Color : ");
 
     s_color->setAccessibleName("S_COLOR");
+
     panel_fixedvignetting->setLayout(l);
     s_color->setRange(0,1);
     l->addWidget(n_color);
@@ -127,7 +131,7 @@ void segParameterPanel::setup_gsfilter(){
 
     s_size->setRange(1,100);
     panel_gsfilter->setLayout(l);
-    s_delta->setRange(0.0001,1000);
+    s_delta->setRange(0.1,1000);
 
     l->addWidget(n_size);
     l->addWidget(s_size);
@@ -150,44 +154,43 @@ void segParameterPanel::setup_shift(){
     s_direction->setAccessibleName("S_DIRECTION");
     s_step->setRange(0,100);
 
-    panel_shift->setLayout(l);
-
     l->addWidget(n_direction);
     l->addWidget(s_direction);
 
     l->addWidget(n_step);
     l->addWidget(s_step);
 
+    panel_shift->setLayout(l);
+
     QObject::connect(s_direction, &QSpinBox::editingFinished, this, &segParameterPanel::reportShift);
     QObject::connect(s_step, &QSpinBox::editingFinished, this, &segParameterPanel::reportShift);
 }
 
 void segParameterPanel::reportGsfilter(){
-    std::cout << "$$$$$$$$$$$$$$$$$report gs filter pra \n " ;
     QSpinBox* size =  dynamic_cast<QSpinBox*>(panel_gsfilter->layout()->itemAt(1)->widget());
     QDoubleSpinBox* delta = dynamic_cast<QDoubleSpinBox*>(panel_gsfilter->layout()->itemAt(3)->widget());
     emit parameterChanged(new segParameter_gsfilter(delta->value(),size->value(),IMG_ALGO_0_GSFILTER));
 }
 
 void segParameterPanel::reportShift(){
-    QSpinBox* direction =  static_cast<QSpinBox*>(panel_gsfilter->layout()->itemAt(1)->widget());
-    QSpinBox* step= static_cast<QSpinBox*>(panel_gsfilter->layout()->itemAt(3)->widget());
+    QSpinBox* direction =  dynamic_cast<QSpinBox*>(panel_shift->layout()->itemAt(1)->widget());
+    QSpinBox* step= dynamic_cast<QSpinBox*>(panel_shift->layout()->itemAt(3)->widget());
     emit parameterChanged(new segParameter_shift(direction->value(),step->value()));
 }
 
 void segParameterPanel::reportAddnoise(){
-   QDoubleSpinBox* mu =  static_cast<QDoubleSpinBox*>(panel_gsfilter->layout()->itemAt(1)->widget());
-   QSpinBox* strength = static_cast<QSpinBox*>(panel_gsfilter->layout()->itemAt(3)->widget());
-   QDoubleSpinBox* var = static_cast<QDoubleSpinBox*>(panel_gsfilter->layout()->itemAt(5)->widget());
+   QDoubleSpinBox* mu =  dynamic_cast<QDoubleSpinBox*>(panel_addnoise->layout()->itemAt(1)->widget());
+   QSpinBox* strength = dynamic_cast<QSpinBox*>(panel_addnoise->layout()->itemAt(3)->widget());
+   QDoubleSpinBox* var = dynamic_cast<QDoubleSpinBox*>(panel_addnoise->layout()->itemAt(5)->widget());
    emit parameterChanged(new segParameter_addnoise(mu->value(), var->value(),strength->value()));
 }
 void segParameterPanel::reportFragment(){
-    QSpinBox* ofs= static_cast<QSpinBox*>(panel_fixedvignetting->layout()->itemAt(1)->widget());
+    QSpinBox* ofs= dynamic_cast<QSpinBox*>(panel_fragment->layout()->itemAt(1)->widget());
     emit parameterChanged(new segParameter_fragment(ofs->value()));
 }
 
 void segParameterPanel::reportFixedVignetting(){
-    QSpinBox* color= static_cast<QSpinBox*>(panel_fixedvignetting->layout()->itemAt(1)->widget());
+    QSpinBox* color= dynamic_cast<QSpinBox*>(panel_fixedvignetting->layout()->itemAt(1)->widget());
     emit parameterChanged(new segParameter_fixedvignetting(color->value()));
 }
 

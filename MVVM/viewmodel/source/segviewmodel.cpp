@@ -48,6 +48,12 @@ void SegViewModel::undo(){
         this->updateView();
 }
 
+void SegViewModel::stage(){
+    if(this->modelManager->stage()){
+        this->updateView();
+    }
+}
+
 void SegViewModel::saveModel()
 {
 
@@ -74,6 +80,7 @@ void SegViewModel::processImage(){
     segParameter_addnoise *p1;
     segParameter_shift    *p2 ;
     segParameter_fixedvignetting *p6;
+    segParameter_fragment *p7;
 
     switch (this->algorithmMode) {
     case IMG_ALGO_0_GSFILTER:
@@ -85,7 +92,7 @@ void SegViewModel::processImage(){
         break;
     case IMG_ALGO_2_SHIFTER:
         p2 = static_cast<segParameter_shift*>(this->parameter);
-        process_status = this->modelManager->shift(3, 5);
+        process_status = this->modelManager->shift(p2->direction, p2->ofs);
         break;
     case IMG_ALGO_3_COLOR_CHAGE:
         process_status = this->modelManager->colorchange();
@@ -101,7 +108,8 @@ void SegViewModel::processImage(){
         process_status = this->modelManager->fixedvignetting(p6->color);
         break;
     case IMG_ALGO_7_FRAGMENT:
-        process_status = this->modelManager->fragment();
+        p7= static_cast<segParameter_fragment*>(this->parameter);
+        process_status = this->modelManager->fragment(p7->offset);
         break;
     case IMG_ALGO_8_FRAGMENT_LOMO:
         process_status = this->modelManager->fragmentlomo();
@@ -117,50 +125,71 @@ void SegViewModel::processImage(){
         cv::Mat ch2;
         cv::cvtColor(modelManager->getLatestData(), ch2, CV_BGR2RGB);
         QImage *qtimg = new QImage((uchar*) ch2.data, ch2.cols, ch2.rows,  ch2.step, QImage::Format_RGB888);
-        setImg2(QPixmap::fromImage(*qtimg));
+        setImg2(QPixmap::fromImage(*qtimg)); //更新V-M里面的数据
     }else{
         setMessage(" fails!");
     }
 }
 
 void SegViewModel::algoParameterChanged(segParameter *p) {
+    delete this->parameter;
     this->parameter = p ;
 }
 
 void SegViewModel::algorithmChanged(const QString & n){
     std::cout << n.toStdString() << std::endl;
     int code ;
-    if(!n.compare(N0_GS_FILTER)) {
+    if(!n.compare(N0_GS_FILTER))
+    {
         code = IMG_ALGO_0_GSFILTER;
         this->algorithmMode = IMG_ALGO_0_GSFILTER ;
-    }else if(!n.compare(N1_ADD_NOISE)){
+    }
+    else if(!n.compare(N1_ADD_NOISE))
+    {
         code = IMG_ALGO_1_ADD_NOISE;
         this->algorithmMode = IMG_ALGO_1_ADD_NOISE ;
-    }else if(!n.compare(N2_SHIFTER)){
-        code = IMG_ALGO_1_ADD_NOISE;
-        this->algorithmMode = IMG_ALGO_2_SHIFTER;
-    }else if(!n.compare(N3_COLOR_CHANGE)){
+    }
+    else if(!n.compare(N2_SHIFTER))
+    {
         code = IMG_ALGO_2_SHIFTER;
-        this->algorithmMode = IMG_ALGO_3_COLOR_CHAGE ;
-    }else if(!n.compare(N4_OLD_IMAGE)){
+        this->algorithmMode = IMG_ALGO_2_SHIFTER;
+    }
+    else if(!n.compare(N3_COLOR_CHANGE))
+    {
         code = IMG_ALGO_3_COLOR_CHAGE;
-        this->algorithmMode = IMG_ALGO_4_OLD_IMAGE ;
-    }else if(!n.compare(N5_OLD_MOVIE_FILTER)){
+        this->algorithmMode = IMG_ALGO_3_COLOR_CHAGE;
+    }
+    else if(!n.compare(N4_OLD_IMAGE))
+    {
         code = IMG_ALGO_4_OLD_IMAGE;
-        this->algorithmMode = IMG_ALGO_5_OLD_MOVIE;
-    }else if(!n.compare(N6_FIXEDVIGNETTING)){
+        this->algorithmMode = IMG_ALGO_4_OLD_IMAGE ;
+    }
+    else if(!n.compare(N5_OLD_MOVIE_FILTER))
+    {
         code = IMG_ALGO_5_OLD_MOVIE;
+        this->algorithmMode = IMG_ALGO_5_OLD_MOVIE;
+    }
+    else if(!n.compare(N6_FIXEDVIGNETTING))
+    {
+        code = IMG_ALGO_6_FIXED_VIGNETTING;
         this->algorithmMode = IMG_ALGO_6_FIXED_VIGNETTING;
-    }else if(!n.compare(N7_FRAGMENT)){
+    }
+    else if(!n.compare(N7_FRAGMENT))
+    {
         code = IMG_ALGO_7_FRAGMENT;
         this->algorithmMode = IMG_ALGO_7_FRAGMENT;
-    }else if(!n.compare(N8_FRAGMEN_MONO)){
+    }
+    else if(!n.compare(N8_FRAGMEN_MONO))
+    {
         code = IMG_ALGO_8_FRAGMENT_LOMO;
         this->algorithmMode = IMG_ALGO_8_FRAGMENT_LOMO ;
-    }else if(!n.compare(N9_OLDPAPER)){
+    }
+    else if(!n.compare(N9_OLDPAPER))
+    {
         code = IMG_ALGO_9_OLD_PAPER;
         this->algorithmMode = IMG_ALGO_9_OLD_PAPER;
-    }else{
+    }
+    else{
         std::cout <<" woops!";
     }
 
@@ -194,10 +223,6 @@ void SegViewModel::setImg2(QPixmap pix){
 
 void SegViewModel::startup(){
     loadAlgorithmList();
-}
-
-void SegViewModel::showDialog(const QString &message){
-    QMessageBox::information(this->view->widget, QGuiApplication::applicationDisplayName(), message);
 }
 
 void SegViewModel::loadData(){
